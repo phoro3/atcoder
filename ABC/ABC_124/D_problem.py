@@ -1,4 +1,5 @@
-# ref. https://atcoder.jp/contests/abc124/submissions/4963013
+# しゃくとり
+# ref. https://atcoder.jp/contests/abc124/submissions/4962905
 N, K = map(int, input().split())
 S = map(int, list(input()))
 
@@ -19,16 +20,21 @@ if count > 0:
 if len(num_list) % 2 == 0:
     num_list.append(0)
 
-#累積和を作る
-cumulative = [0] * (len(num_list) + 1)
-for i in range(len(num_list)):
-    cumulative[i + 1] = cumulative[i] + num_list[i]
-
 ans = 0
 add = 2 * K + 1
 
-for i in range(len(cumulative)):
-    if i % 2 == 0:
-        add_i = min(i + add, len(cumulative) - 1)
-        ans = max(ans, cumulative[add_i] - cumulative[i])
+left = 0
+right = 0
+tmp = 0 # [left, right)のsum
+for i in range(0, len(num_list), 2):
+    next_left = i
+    next_right = min(i + add, len(num_list))
+
+    while left < next_left:
+        tmp -= num_list[left]
+        left += 1
+    while right < next_right:
+        tmp += num_list[right]
+        right += 1
+    ans = max(ans, tmp)
 print(ans)
